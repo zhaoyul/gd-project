@@ -3,18 +3,30 @@
    [reagent.core :as r]
    [camera.list :as c]
    [antizer.reagent :as ant]
+   [test.data]
    ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vars
 
-(defonce app-state
+(def app-state
   (r/atom {:user {:user-name "kevin"
                   :role :admin}
            :show-video false
+           :cameras test.data/cameras
            }))
 
+(defn update-cameras! [f & args]
+  (apply swap! app-state update-in [:cameras] f args))
+
+(defn add-camera! [c]
+  (update-cameras! conj c))
+
+(defn remove-camera! [c]
+  (update-cameras! (fn [cs]
+                     (vec (remove #(= % c) cs)))
+                   c))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn side-menu []
@@ -54,10 +66,10 @@
                      :on-ok #(reset! modal-form false) :on-cancel #(reset! modal-form false)}
           (ant/create-form (user-form false))]])))
 
-(defn content-area []
+(defn content-area [app-state]
   [ant/layout-content {:class "content-ant"}
-   [c/datatable]
-   [c/video-modal @app-state]
+   [c/datatable app-state]
+   #_[c/video-modal @app-state]
    ])
 
 
@@ -76,7 +88,7 @@
       [ant/layout
        [ant/layout-sider [side-menu]]
        [ant/layout {:style {:width "60%"}}
-        [content-area]]]]]))
+        [content-area app-state]]]]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page

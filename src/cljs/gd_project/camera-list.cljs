@@ -41,7 +41,8 @@
     [ant/modal {:visible show-modal :title "video"
                 :on-ok (fn []
                          (prn "cancel"))
-                :on-cancel #(reset! modal1 false)}
+                :on-cancel (fn []
+                             (prn "model"))}
 
      (r/as-element [:p "Some content 1"])]))
 
@@ -72,7 +73,7 @@
                  :show-total #(str "共计: " % " 个摄像头")})
 
 (defn datatable [app-state]
-  (let [data (r/atom t/people)]
+  (let [data (r/atom (@app-state :cameras))]
     (fn []
       [:div
        [:h2 "摄像头列表"]
