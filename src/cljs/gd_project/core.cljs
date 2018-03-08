@@ -4,35 +4,19 @@
    [camera.list :as c]
    [antizer.reagent :as ant]
    [test.data]
+   [app.state :as state]
    ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vars
 
-(def app-state
-  (r/atom {:user {:user-name "kevin"
-                  :role :admin}
-           :show-video false
-           :cameras test.data/cameras
-           }))
-
-(defn update-cameras! [f & args]
-  (apply swap! app-state update-in [:cameras] f args))
-
-(defn add-camera! [c]
-  (update-cameras! conj c))
-
-(defn remove-camera! [c]
-  (update-cameras! (fn [cs]
-                     (vec (remove #(= % c) cs)))
-                   c))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn side-menu []
   [ant/menu {:mode "inline" :theme "light" :style {:height "100%"}}
-   [ant/menu-item {:disabled true} "摄像头相关"]
-   [ant/menu-item "摄像头列表"]
+   [ant/menu-item {:disabled true} "标题"]
+   [ant/menu-item "列表"]
    [ant/menu-sub-menu {:title "Sub Menu"}
     [ant/menu-item "Item 1"]
     [ant/menu-item "Item 2"]]
@@ -42,34 +26,24 @@
     [ant/menu-item (r/as-element [:span [ant/icon {:type "user"}] "Item 1"])]
     [ant/menu-item (r/as-element [:span [ant/icon {:type "notification"}] "Item 2"])]]])
 
-(defn modal []
-  (let [modal1 (r/atom false)
-        modal-form (r/atom false)
-        modal-loading (r/atom false)]
-    (fn []
-      [:div.example-button
-       [:h2 "Modal"]
-       [ant/button {:on-click #(reset! modal1 true)} "模式对话"]
-       [ant/modal {:visible @modal1 :title "Title of modal"
-                   :confirm-loading @modal-loading
-                   :on-ok (fn []
-                            (reset! modal-loading true)
-                            (prn "cancel")
-                            (js/setTimeout (fn []
-                                             (reset! modal1 false)) 1000))
-                   :on-cancel #(reset! modal1 false)}
 
-        (r/as-element [:p "Some content 1"])]
-       [ant/button {:on-click #(ant/modal-confirm {:title "Are you sure?" :content "Some content"})} "Confirmation Modal"]
-       [ant/button {:on-click #(reset! modal-form true)} "Modal Form"]
-       #_[ant/modal {:visible @modal-form :title "Modal Form" :width 600
-                     :on-ok #(reset! modal-form false) :on-cancel #(reset! modal-form false)}
-          (ant/create-form (user-form false))]])))
 
 (defn content-area [app-state]
   [ant/layout-content {:class "content-ant"}
    [c/datatable app-state]
-   #_[c/video-modal @app-state]
+
+   [ant/modal {:visible (state/modal-visable?)
+               :footer nil
+               :on-cancel (fn [] (state/flip-modal!))
+               :width 436
+               }
+    [:video {:autoPlay "true"
+             :width 400
+             :height 400
+             :controls true
+             :preload "auto"}
+     [:source {:src "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+               :type "application/x-mpegURL"}]]]
    ])
 
 
@@ -81,14 +55,14 @@
        [ant/layout-header {:class "banner"}
         (r/as-element
          [ant/row
-          [ant/col {:span 12} [:h2.banner-header "健康厨房"]]
+          [ant/col {:span 12} [:h2.banner-header "标题"]]
           [ant/col {:span 1 :offset 11}
            [:a {:href "http://iqd.qtv.com.cn/"}
             [ant/icon {:class "banner-log" :type "compass"}]]]])]]
       [ant/layout
        [ant/layout-sider [side-menu]]
        [ant/layout {:style {:width "60%"}}
-        [content-area app-state]]]]]))
+        [content-area state/app-state]]]]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page

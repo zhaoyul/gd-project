@@ -3,49 +3,12 @@
    [reagent.core :as r]
    [antizer.reagent :as ant]
    [test.data :as t]
+   [app.state :as state]
    ))
 
 ;;test address
 ;; http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8
 ;; http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8
-
-
-
-
-(defn modal []
-  (let [modal1 (r/atom false)
-        modal-form (r/atom false)
-        modal-loading (r/atom false)]
-    (fn []
-      [:div.example-button
-       [:h2 "Modal"]
-       [ant/button {:on-click #(reset! modal1 true)} "模式对话"]
-       [ant/modal {:visible @modal1 :title "Title of modal"
-                   :confirm-loading @modal-loading
-                   :on-ok (fn []
-                            (reset! modal-loading true)
-                            (prn "cancel")
-                            (js/setTimeout (fn []
-                                             (reset! modal1 false)) 1000))
-                   :on-cancel #(reset! modal1 false)}
-
-        (r/as-element [:p "Some content 1"])]
-       [ant/button {:on-click #(ant/modal-confirm {:title "Are you sure?" :content "Some content"})} "Confirmation Modal"]
-       [ant/button {:on-click #(reset! modal-form true)} "Modal Form"]
-       #_[ant/modal {:visible @modal-form :title "Modal Form" :width 600
-                     :on-ok #(reset! modal-form false) :on-cancel #(reset! modal-form false)}
-          (ant/create-form (user-form false))]])))
-
-(defn video-modal [app-state]
-  (let [show-modal (get-in [:show-video] app-state)]
-    [ant/modal {:visible show-modal :title "video"
-                :on-ok (fn []
-                         (prn "cancel"))
-                :on-cancel (fn []
-                             (prn "model"))}
-
-     (r/as-element [:p "Some content 1"])]))
-
 
 (defn add-actions-column [columns data-atom]
   (conj columns
@@ -55,9 +18,7 @@
            [ant/button {:icon "play-circle-o"
                         :on-click
                         (fn []
-                          (reset! data-atom
-                                  (remove (fn [d] (= (get (js->clj %2) "id")
-                                                    (:id d))) @data-atom)))}]
+                          (state/flip-modal!))}]
            )}
         {:title "删除"
          :render
