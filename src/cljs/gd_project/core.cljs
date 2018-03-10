@@ -7,14 +7,32 @@
    [app.state :as state]
    ))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
+(def form-style {:label-col {:span 6}
+                 :wrapper-col {:span 13}})
+
+(defn login-form []
+  (fn []
+    (let [my-form (ant/get-form)]
+      [ant/form
+       [ant/form-item {:label "用户名："}
+        (ant/decorate-field my-form "name"
+                            [ant/input])]
+       [ant/form-item {:label "密码："}
+        ;; validates that the password field is not empty
+        (ant/decorate-field my-form "password" {:rules [{:required true}]}
+                            [ant/input])]])))
+
+(defn login-modal-form []
+  [ant/modal {:visible true :title "登录"}
+   (ant/create-form (login-form))])
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 (defn side-menu []
-  [ant/menu {:mode "inline" :theme "light" :style {:height "100%"}}
+  [ant/menu {:mode "inline" :theme "dark" :style {:height "100%"}}
    [ant/menu-item {:disabled true} "标题"]
    [ant/menu-item "列表"]
    [ant/menu-sub-menu {:title "Sub Menu"}
@@ -31,19 +49,21 @@
 (defn content-area [app-state]
   [ant/layout-content {:class "content-ant"}
    [c/datatable app-state]
+   [login-modal-form]
 
-   [ant/modal {:visible (state/modal-visable?)
-               :footer nil
-               :on-cancel (fn [] (state/flip-modal!))
-               :width 436
-               }
-    [:video {:autoPlay "true"
-             :width 400
-             :height 400
-             :controls true
-             :preload "auto"}
-     [:source {:src "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
-               :type "application/x-mpegURL"}]]]
+   #_(if (state/modal-visable?)
+       [ant/modal {:visible (state/modal-visable?)
+                   :footer nil
+                   :on-cancel (fn [] (state/flip-modal!))
+                   :width 436
+                   }
+        [:video {:autoPlay "true"
+                 :width 400
+                 :height 400
+                 :controls true
+                 :preload "auto"}
+         [:source {:src "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+                   :type "application/x-mpegURL"}]]])
    ])
 
 
@@ -56,22 +76,21 @@
         (r/as-element
          [ant/row
           [ant/col {:span 12} [:h2.banner-header "标题"]]
-          [ant/col {:span 1 :offset 11}
-           [:a {:href "http://iqd.qtv.com.cn/"}
-            [ant/icon {:class "banner-log" :type "compass"}]]]])]]
+          [ant/col {:span 2 :offset 10}
+           [ant/dropdown {:overlay
+                          (r/as-element [ant/menu
+                                         [ant/menu-item {:target "_blank"
+                                                         :rel="noopener noreferrer"
+                                                         :href "http://www.alipay.com/"
+                                                         }
+                                          "登出"]])}
+            [:a {:className "ant-dropdown-link" :href "#"} (state/user-name)
+             [ant/icon {:type "down"}]]]]])]]
+
       [ant/layout
        [ant/layout-sider [side-menu]]
        [ant/layout {:style {:width "60%"}}
         [content-area state/app-state]]]]]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
-
-(defn page [ratom]
-
-  [ant/button {:on-click #(ant/message-info "Hello Reagent!")} "Click me"])
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize App

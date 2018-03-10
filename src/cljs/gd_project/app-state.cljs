@@ -6,7 +6,7 @@
 (defonce app-state
   (r/atom {:user {:user-name "kevin"
                   :role :admin}
-           :show-video true
+           :show-video false
            :cameras test/cameras
            }))
 
@@ -25,3 +25,15 @@
   (get-in @app-state [:show-video]))
 (defn flip-modal! []
   (swap! app-state update-in [:show-video] not))
+
+;;; user
+
+(defn user-name []
+  (get-in @app-state [:user :user-name]))
+
+(defn user-role []
+  (get-in @app-state [:user :role]))
+
+(defn login? []
+  (contains? @app-state :user)
+  )
