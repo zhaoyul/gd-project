@@ -8,26 +8,37 @@
    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def form-style {:label-col {:span 6}
-                 :wrapper-col {:span 13}})
+
 
 (defn login-form []
   (fn []
-    (let [my-form (ant/get-form)]
+    (let [my-form    (ant/get-form)
+          form-style {:label-col {:span 3}
+                      :wrapper-col {:span 20}}]
       [ant/form
-       [ant/form-item {:label "用户名："}
-        (ant/decorate-field my-form "name"
+       [ant/form-item (merge form-style {:label "用户名："})
+        (ant/decorate-field my-form "name" {:rules [{:required true}]}
                             [ant/input])]
-       [ant/form-item {:label "密码："}
-        ;; validates that the password field is not empty
+       [ant/form-item (merge form-style {:label "密码："})
         (ant/decorate-field my-form "password" {:rules [{:required true}]}
-                            [ant/input])]])))
+                            [ant/input {:type "password"}])]
+       [ant/form-item {:wrapper-col {:offset 6}}
+        [ant/col {:span 4}
+         [ant/button {:type "primary"
+                      :size "large"
+                      :on-click #(ant/validate-fields my-form)}
+          "登录"]]
+        [ant/col {:offset 10}
+         [ant/button {:size "large"
+                      :on-click #(ant/reset-fields my-form)}
+          "取消"]]]])))
 
 (defn login-modal-form []
-  [ant/modal {:visible true :title "登录"}
+  [ant/modal {:visible (not (state/login?))
+              :title "登录"
+              :footer nil
+              }
    (ant/create-form (login-form))])
-
-
 
 
 

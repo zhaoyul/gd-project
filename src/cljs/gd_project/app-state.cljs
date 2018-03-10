@@ -6,6 +6,7 @@
 (defonce app-state
   (r/atom {:user {:user-name "kevin"
                   :role :admin}
+           :login? false
            :show-video false
            :cameras test/cameras
            }))
@@ -23,6 +24,7 @@
 
 (defn modal-visable? []
   (get-in @app-state [:show-video]))
+
 (defn flip-modal! []
   (swap! app-state update-in [:show-video] not))
 
@@ -34,6 +36,15 @@
 (defn user-role []
   (get-in @app-state [:user :role]))
 
+
+
+
 (defn login? []
-  (contains? @app-state :user)
+  (:login? @app-state)
   )
+
+(defn login! []
+  (swap! app-state conj {:login? true}))
+
+(defn logout! []
+  (swap! app-state conj {:login? false}))
