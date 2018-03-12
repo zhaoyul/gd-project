@@ -37,6 +37,7 @@
   [ant/modal {:visible (not (state/login?))
               :title "登录"
               :footer nil
+              :on-cancel #(state/login!)
               }
    (ant/create-form (login-form))])
 
@@ -44,37 +45,30 @@
 
 (defn side-menu []
   [ant/menu {:mode "inline" :theme "dark" :style {:height "100%"}}
-   [ant/menu-item {:disabled true} "标题"]
-   [ant/menu-item "列表"]
-   [ant/menu-sub-menu {:title "Sub Menu"}
-    [ant/menu-item "Item 1"]
-    [ant/menu-item "Item 2"]]
-   [ant/menu-item {:disabled true} "Menu with Icons"]
-   [ant/menu-item (r/as-element [:span [ant/icon {:type "home"}] "Menu Item"])]
-   [ant/menu-sub-menu {:title (r/as-element [:span [ant/icon {:type "setting"}] "Sub Menu"])}
+   [ant/menu-item {:disabled true} "Functions"]
+   [ant/menu-item (r/as-element [:span [ant/icon {:type "home"}] "Cameras"])]
+   [ant/menu-sub-menu {:title (r/as-element [:span [ant/icon {:type "setting"}] "Management"])}
     [ant/menu-item (r/as-element [:span [ant/icon {:type "user"}] "Item 1"])]
     [ant/menu-item (r/as-element [:span [ant/icon {:type "notification"}] "Item 2"])]]])
-
-
 
 (defn content-area [app-state]
   [ant/layout-content {:class "content-ant"}
    [c/datatable app-state]
    [login-modal-form]
 
-   #_(if (state/modal-visable?)
-       [ant/modal {:visible (state/modal-visable?)
-                   :footer nil
-                   :on-cancel (fn [] (state/flip-modal!))
-                   :width 436
-                   }
-        [:video {:autoPlay "true"
-                 :width 400
-                 :height 400
-                 :controls true
-                 :preload "auto"}
-         [:source {:src "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
-                   :type "application/x-mpegURL"}]]])
+   (if (state/modal-visable?)
+     [ant/modal {:visible (state/modal-visable?)
+                 :footer nil
+                 :on-cancel (fn [] (state/flip-modal!))
+                 :width 436
+                 }
+      [:video {:autoPlay "true"
+               :width 400
+               :height 400
+               :controls true
+               :preload "auto"}
+       [:source {:src "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+                 :type "application/x-mpegURL"}]]])
    ])
 
 

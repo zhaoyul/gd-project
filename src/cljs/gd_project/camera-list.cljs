@@ -10,25 +10,37 @@
 ;; http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8
 ;; http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8
 
+(defn preview-column [data-atom]
+  {:title "播放"
+   :render
+   #(r/as-element
+     [ant/button {:icon "play-circle-o"
+                  :on-click
+                  (fn []
+                    (state/flip-modal!))}]
+     )})
+
+(defn delete-column [data-atom]
+  (if (state/admin?)
+    {:title "删除"
+     :render
+     #(r/as-element
+       [ant/button {:icon "delete" :type "danger"
+                    :on-click
+                    (fn []
+                      (reset! data-atom
+                              (remove (fn [d] (= (get (js->clj %2) "id") (:id d))) @data-atom)))}])}))
+
+(defn remove-nil [input]
+  (filter (complement nil?) input))
+
+
 (defn add-actions-column [columns data-atom]
-  (conj columns
-        {:title "播放"
-         :render
-         #(r/as-element
-           [ant/button {:icon "play-circle-o"
-                        :on-click
-                        (fn []
-                          (state/flip-modal!))}]
-           )}
-        {:title "删除"
-         :render
-         #(r/as-element
-           [ant/button {:icon "delete" :type "danger"
-                        :on-click
-                        (fn []
-                          (reset! data-atom
-                                  (remove (fn [d] (= (get (js->clj %2) "id")
-                                                    (:id d))) @data-atom)))}])}))
+  (remove-nil(conj columns
+                   (preview-column data-atom)
+                   (delete-column data-atom)
+                   )))
+
 (def pagination {:show-size-changer true
                  :page-size-options ["5" "10" "20"]
                  :show-total #(str "共计: " % " 个摄像头")})

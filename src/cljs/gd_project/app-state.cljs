@@ -3,7 +3,8 @@
             [test.data :as test]))
 
 
-(defonce app-state
+
+(def app-state
   (r/atom {:user {:user-name "kevin"
                   :role :admin}
            :login? false
@@ -48,3 +49,10 @@
 
 (defn logout! []
   (swap! app-state conj {:login? false}))
+
+
+(defn admin? []
+  (if (= :admin
+         (user-role))
+    true
+    false))
