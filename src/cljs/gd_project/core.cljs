@@ -14,10 +14,10 @@
   (fn []
     (let [my-form    (ant/get-form)
           form-style {:label-col {:span 3}
-                      :wrapper-col {:span 20}
-                      :on-submit (fn [e]
-                                   (prn "submit"))}]
-      [ant/form
+                      :wrapper-col {:span 20}}]
+      [ant/form {:on-submit (fn [e]
+                              (.preventDefault e)
+                              (state/login!))}
        [ant/form-item (merge form-style {:label "用户名："})
         (ant/decorate-field my-form "name" {:rules [{:required true}]}
                             [ant/input])]
