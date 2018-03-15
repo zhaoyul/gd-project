@@ -30,7 +30,8 @@
           "登录"]]
         [ant/col {:offset 10}
          [ant/button {:size "large"
-                      :on-click #(ant/reset-fields my-form)}
+                      :on-click (fn []
+                                  (ant/reset-fields my-form))}
           "取消"]]]])))
 
 (defn login-modal-form []
@@ -44,12 +45,27 @@
 
 
 (defn side-menu []
-  [ant/menu {:mode "inline" :theme "dark" :style {:height "100%"}}
+  [ant/menu {:mode "inline" :theme "dark" :style {:height "100%"}
+             :on-click (fn [e]
+                         (let [cljs-e (js->clj e)
+                               item (cljs-e "key")]
+                           (prn item)
+                           (cond
+                             (= (name :camera-item) item) (state/set-route! ::state/route-camera)
+                             (= (name :management-item1) item) (state/set-route! ::state/item1)
+                             )
+                           )
+                         )
+             }
    [ant/menu-item {:disabled true} "Functions"]
-   [ant/menu-item (r/as-element [:span [ant/icon {:type "home"}] "Cameras"])]
-   [ant/menu-sub-menu {:title (r/as-element [:span [ant/icon {:type "setting"}] "Management"])}
-    [ant/menu-item (r/as-element [:span [ant/icon {:type "user"}] "Item 1"])]
-    [ant/menu-item (r/as-element [:span [ant/icon {:type "notification"}] "Item 2"])]]])
+   [ant/menu-item {:key :camera-item}
+    (r/as-element [:span
+                   [ant/icon {:type "home"}] "摄像头"])]
+   [ant/menu-sub-menu {:title (r/as-element [:span [ant/icon {:type "setting"}] "管理"])}
+    [ant/menu-item {:key :management-item1}
+     (r/as-element [:span [ant/icon {:type "user"}] "Item 1"])]
+    [ant/menu-item {:key :management-item2}
+     (r/as-element [:span [ant/icon {:type "notification"}] "Item 2"])]]])
 
 (defn content-area [app-state]
   [ant/layout-content {:class "content-ant"}
@@ -80,7 +96,7 @@
        [ant/layout-header {:class "banner"}
         (r/as-element
          [ant/row
-          [ant/col {:span 12} [:h2.banner-header "标题"]]
+          [ant/col {:span 12} [:h2.banner-header "爱青岛健康厨房"]]
           [ant/col {:span 2 :offset 10}
            [ant/dropdown {:overlay
                           (r/as-element [ant/menu
@@ -95,7 +111,8 @@
       [ant/layout
        [ant/layout-sider [side-menu]]
        [ant/layout {:style {:width "60%"}}
-        [content-area state/app-state]]]]]))
+        (if (= ::state/route-camera (state/route))
+          [content-area state/app-state])]]]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize App

@@ -10,6 +10,7 @@
            :login? false
            :show-video false
            :cameras test/cameras
+           :route ::route-camera
            }))
 
 (defn update-cameras! [f & args]
@@ -56,3 +57,10 @@
          (user-role))
     true
     false))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; route
+(defn route []
+  (:route @app-state))
+
+(defn set-route! [new-route]
+  (swap! app-state conj {:route new-route}))

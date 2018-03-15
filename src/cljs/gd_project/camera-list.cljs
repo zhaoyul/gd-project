@@ -26,10 +26,10 @@
      :render
      #(r/as-element
        [ant/button {:icon "delete" :type "danger"
-                    :on-click
-                    (fn []
-                      (reset! data-atom
-                              (remove (fn [d] (= (get (js->clj %2) "id") (:id d))) @data-atom)))}])}))
+                    :on-click  (fn []
+                                 (reset! data-atom
+                                         (remove (fn [d] (= (get (js->clj %2) "id")
+                                                           (:id d))) @data-atom)))}])}))
 
 (defn remove-nil [input]
   (filter (complement nil?) input))
@@ -50,6 +50,10 @@
     (fn []
       [:div
        [:h2 "摄像头列表"]
+       [ant/row {:span 24}
+        [ant/col {:span 4 :offset 20}
+         [ant/button {:icon "plus-circle-o" } "增加新摄像头"]]]
+
        [ant/table
         {:columns (add-actions-column t/columns data)
          :dataSource @data :pagination pagination :row-key "id"

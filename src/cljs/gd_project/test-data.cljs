@@ -16,3 +16,11 @@
               {:id 3 :area "平度" :status "没有服务" :address "平度市万福肉食>万福肉食"
                :service "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"}
               ])
+
+
+(def users [{:name "Kevin Li1" :unit "Haier Group1" :role :admin}
+            {:name "Kevin Li2" :unit "Haier Group2" :role :city-admin}
+            {:name "Kevin Li3" :unit "Haier Group3" :role :unit-admin}
+            {:name "Kevin Li4" :unit "Haier Group4" :role :audit-admin}
+            {:name "Kevin Li5" :unit "Haier Group5" :role :admin}
+            ])
