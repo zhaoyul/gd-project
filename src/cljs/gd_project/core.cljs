@@ -14,7 +14,9 @@
   (fn []
     (let [my-form    (ant/get-form)
           form-style {:label-col {:span 3}
-                      :wrapper-col {:span 20}}]
+                      :wrapper-col {:span 20}
+                      :on-submit (fn [e]
+                                   (prn "submit"))}]
       [ant/form
        [ant/form-item (merge form-style {:label "用户名："})
         (ant/decorate-field my-form "name" {:rules [{:required true}]}
@@ -26,7 +28,8 @@
         [ant/col {:span 4}
          [ant/button {:type "primary"
                       :size "large"
-                      :on-click #(ant/validate-fields my-form)}
+                      :html-type "submit"
+                      }
           "登录"]]
         [ant/col {:offset 10}
          [ant/button {:size "large"
@@ -96,7 +99,7 @@
        [ant/layout-header {:class "banner"}
         (r/as-element
          [ant/row
-          [ant/col {:span 12} [:h2.banner-header "爱青岛健康厨房"]]
+          [ant/col {:span 12} [:h2.banner-header "爱青岛城市直播云平台"]]
           [ant/col {:span 2 :offset 10}
            [ant/dropdown {:overlay
                           (r/as-element [ant/menu
