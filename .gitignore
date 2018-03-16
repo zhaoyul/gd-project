@@ -4,3 +4,5 @@
 /resources/public/js
 out
 /.cljs_rhino_repl
+.DS_Store
+/log
