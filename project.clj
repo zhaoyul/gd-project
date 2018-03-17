@@ -27,6 +27,8 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [selmer "1.11.7"]
+                 [luminus-migrations "0.5.0"]
+                 [org.xerial/sqlite-jdbc "3.21.0.1"]
                  ]
 
   :min-lein-version "2.5.3"
@@ -34,7 +36,8 @@
   :source-paths ["src/clj"]
 
   :plugins [[lein-cljsbuild "1.1.4"]
-            [lein-immutant "2.1.0"]]
+            [lein-immutant "2.1.0"]
+            [migratus-lein "0.5.4"]]
 
   :clean-targets ^{:protect false} ["resources/public/js"
                                     "target"]
@@ -43,6 +46,7 @@
 
   :target-path "target/%s/"
   :main ^:skip-aot gd-backend.core
+  :migratus {:store :database :db ~(get (System/getenv) "DATABASE_URL")}
 
   :profiles
   {
