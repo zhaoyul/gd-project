@@ -6,3 +6,4 @@ out
 /.cljs_rhino_repl
 .DS_Store
 /log
+.nrepl-port
