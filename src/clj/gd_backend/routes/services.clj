@@ -7,12 +7,12 @@
   {:swagger {:ui "/swagger-ui"
              :spec "/swagger.json"
              :data {:info {:version "1.0.0"
-                           :title "后台API"
-                           :description "API列表测试"}}}} 
+                           :title "爱青岛城市直播云平台后台API"
+                           :description "爱青岛城市直播云平台API列表测试"}}}} 
   (context "/api" []
-           :tags ["thingie"]
+           :tags ["摄像头相关API"]
 
-           (GET "/plus" []
+           (GET "/cameras" []
                 :return       Long
                 :query-params [x :- Long, {y :- Long 1}]
                 :summary      "x+y with query-parameters. y defaults to 1."
@@ -24,20 +24,4 @@
                  :summary     "x-y with body-parameters."
                  (ok (- x y)))
 
-           (GET "/times/:x/:y" []
-                :return      Long
-                :path-params [x :- Long, y :- Long]
-                :summary     "x*y with path-parameters"
-                (ok (* x y)))
-
-           (POST "/divide" []
-                 :return      Double
-                 :form-params [x :- Long, y :- Long]
-                 :summary     "x/y with form-parameters"
-                 (ok (/ x y)))
-
-           (GET "/power" []
-                :return      Long
-                :header-params [x :- Long, y :- Long]
-                :summary     "x^y with header-parameters"
-                (ok (long (Math/pow x y))))))
+           ))
