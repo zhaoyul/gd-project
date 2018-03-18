@@ -1,4 +1,5 @@
-(ns test.data)
+(ns test.data
+  (:require [http-client.core :as http]) )
 
 (defn comparison [data1 data2 field]
   (compare (get (js->clj data1 :keywordize-keys true) field)
@@ -16,6 +17,8 @@
               {:id 3 :area "平度" :status "没有服务" :address "平度市万福肉食>万福肉食"
                :service "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"}
               ])
+
+(def real-cameras (http/get-all-cameras) )
 
 
 (def users [{:name "Kevin Li1" :unit "Haier Group1" :role :admin}

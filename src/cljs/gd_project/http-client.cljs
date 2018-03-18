@@ -10,9 +10,10 @@
   []
   (GET (str base-url "/cameras")
        {:headers {"Access-Control-Allow-Headers" "Content-Type"
-                  "Access-Control-Allow-Origin" "*"}}))
+                  "Access-Control-Allow-Origin" "*"}
+        :handler (fn [respond]
+                   (prn (keys respond)))}))
 
-(prn (get-all-cameras))
 
 (defn get-article
   [id]
