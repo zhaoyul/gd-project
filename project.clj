@@ -1,9 +1,9 @@
 (defproject gd-project "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.1"]
                  [com.cemerick/piggieback "0.2.1"]
-                 [figwheel-sidecar "0.5.0-2"]
+                 [figwheel-sidecar "0.5.15"]
                  [antizer "0.2.2"]
                  [clj-time "0.14.2"]
                  [compojure "1.6.0"]
@@ -28,7 +28,9 @@
                  [ring/ring-defaults "0.3.1"]
                  [selmer "1.11.7"]
                  [luminus-migrations "0.5.0"]
-                 [org.xerial/sqlite-jdbc "3.21.0.1"]
+                 #_[org.xerial/sqlite-jdbc "3.21.0.1"]
+                 [com.h2database/h2 "1.4.196"]
+                 [conman "0.7.6"]
                  ]
 
   :min-lein-version "2.5.3"
@@ -67,7 +69,7 @@
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                                 [lein-figwheel "0.5.10"]]
+                                 [lein-figwheel "0.5.15"]]
 
                   :source-paths ["env/dev/clj"]
                   :resource-paths ["env/dev/resources"]

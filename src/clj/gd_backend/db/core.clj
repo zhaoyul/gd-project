@@ -1,4 +1,4 @@
-(ns guestbook.db.core
+(ns gd-backend.db.core
   (:require
    [clj-time.jdbc]
    [conman.core :as conman]

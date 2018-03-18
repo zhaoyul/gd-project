@@ -99,7 +99,7 @@
        [ant/layout-header {:class "banner"}
         (r/as-element
          [ant/row
-          [ant/col {:span 12} [:h2.banner-header "爱青岛城市直播云平台"]]
+          [ant/col {:span 12} [:h2.banner-header "爱青岛城"]]
           [ant/col {:span 2 :offset 10}
            [ant/dropdown {:overlay
                           (r/as-element [ant/menu
