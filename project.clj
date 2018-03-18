@@ -5,6 +5,8 @@
                  [com.cemerick/piggieback "0.2.1"]
                  [figwheel-sidecar "0.5.15"]
                  [antizer "0.2.2"]
+                 [cljs-ajax/cljs-ajax "0.7.3"]
+                 ;;clj libs below
                  [clj-time "0.14.2"]
                  [compojure "1.6.0"]
                  [cprop "0.1.11"]

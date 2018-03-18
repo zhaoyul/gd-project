@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [routes wrap-routes]]
             [gd-backend.layout :refer [error-page]]
             [gd-backend.routes.home :refer [home-routes]]
-            [gd-backend.routes.services :refer [service-routes]]
+            [gd-backend.routes.services :refer [final-service-routes]]
             [compojure.route :as route]
             [gd-backend.env :refer [defaults]]
             [mount.core :as mount]
@@ -19,7 +19,7 @@
     (-> #'home-routes
         (wrap-routes middleware/wrap-csrf)
         (wrap-routes middleware/wrap-formats))
-    #'service-routes
+    #'final-service-routes
     (route/not-found
      (:body
       (error-page {:status 404

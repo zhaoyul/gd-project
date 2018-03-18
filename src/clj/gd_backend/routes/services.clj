@@ -1,7 +1,16 @@
 (ns gd-backend.routes.services
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [mount.core :as mount]
+            [ring.middleware.cors :refer [wrap-cors]]
+            [gd-backend.db.core :as db]))
+
+(defn k-test []
+  (db/get-cameras)
+  )
+
+
 
 (defapi service-routes
   {:swagger {:ui "/swagger-ui"
@@ -13,10 +22,10 @@
            :tags ["摄像头相关API"]
 
            (GET "/cameras" []
-                :return       Long
-                :query-params [x :- Long, {y :- Long 1}]
+                                        ;:return      Long
+                                        ;:query-params [x :- Long, {y :- Long 1}]
                 :summary      "x+y with query-parameters. y defaults to 1."
-                (ok (+ x y)))
+                (ok (k-test)))
 
            (POST "/minus" []
                  :return      Long
@@ -25,3 +34,10 @@
                  (ok (- x y)))
 
            ))
+
+(def final-service-routes
+  (wrap-cors service-routes :access-control-allow-origin [#"http://.*"]
+             :access-control-allow-methods [:get :put :post :delete]))
+
+
+
