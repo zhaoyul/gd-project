@@ -55,7 +55,7 @@
          [ant/button {:icon "plus-circle-o" } "增加新摄像头"]]]
 
        [ant/table
-        {:columns (add-actions-column t/columns data)
+        {:columns (add-actions-column t/columns (r/atom (@app.state :cameras)))
          :dataSource (@app-state :cameras) :pagination pagination :row-key "id"
          :row-selection
          {:on-change
