@@ -5,6 +5,7 @@
    [antizer.reagent :as ant]
    [test.data]
    [app.state :as state]
+   [gd-http-client.core :as http]
    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,7 +18,8 @@
                       :wrapper-col {:span 20}}]
       [ant/form {:on-submit (fn [e]
                               (.preventDefault e)
-                              (state/login!))}
+                              (state/login!)
+                              (http/build-camera-list))}
        [ant/form-item (merge form-style {:label "用户名："})
         (ant/decorate-field my-form "name" {:rules [{:required true}]}
                             [ant/input])]

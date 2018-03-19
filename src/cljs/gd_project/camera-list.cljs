@@ -56,7 +56,7 @@
 
        [ant/table
         {:columns (add-actions-column t/columns data)
-         :dataSource @data :pagination pagination :row-key "id"
+         :dataSource (@app-state :cameras) :pagination pagination :row-key "id"
          :row-selection
          {:on-change
           #(let [selected (js->clj %2 :keywordize-keys true)]

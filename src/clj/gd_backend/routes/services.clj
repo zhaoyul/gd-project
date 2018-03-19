@@ -37,7 +37,8 @@
 
 (def final-service-routes
   (wrap-cors service-routes :access-control-allow-origin [#"http://.*"]
-             :access-control-allow-methods [:get :put :post :delete]))
+             :access-control-allow-methods [:get :put :post :delete]
+             :access-control-allow-credentials true))
 
 
 

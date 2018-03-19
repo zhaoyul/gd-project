@@ -9,12 +9,18 @@
                   :role :admin}
            :login? false
            :show-video false
-           :cameras test/cameras
+           :cameras nil
            :route ::route-camera
            }))
 
+;;; cameras
+
 (defn update-cameras! [f & args]
   (apply swap! app-state update-in [:cameras] f args))
+
+(defn populate-cameras! [camera-list]
+  (prn (str "camera list size: " (count camera-list)))
+  (swap! app-state assoc :cameras camera-list))
 
 (defn add-camera! [c]
   (update-cameras! conj c))
@@ -23,6 +29,8 @@
   (update-cameras! (fn [cs]
                      (vec (remove #(= % c) cs)))
                    c))
+
+;;; video
 
 (defn modal-visable? []
   (get-in @app-state [:show-video]))
