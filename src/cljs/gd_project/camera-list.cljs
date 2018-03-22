@@ -53,9 +53,8 @@
        [ant/row {:span 24}
         [ant/col {:span 4 :offset 20}
          [ant/button {:icon "plus-circle-o" } "增加新摄像头"]]]
-
        [ant/table
-        {:columns (add-actions-column t/columns (r/atom (@app.state :cameras)))
+        {:columns (add-actions-column t/columns data)
          :dataSource (@app-state :cameras) :pagination pagination :row-key "id"
          :row-selection
          {:on-change
